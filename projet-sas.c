@@ -32,105 +32,6 @@ int trouverDepartement(char *departement) {
 }
 
 
-// Fonction pour afficher les étudiants d'un département spécifique
-void afficherEtudiantsParDepartement() {
-    int trouve = 0;
-    char departement[50];
-
-    printf("Donner le nom du departement: \n");
-    scanf("%s",&departement);
-
-
-    printf("\nListe des etudiants dans le departement %s:\n", departement);
-
-    // Parcourir tous les étudiants
-    for (int i = 0; i < nombre_etudiants; i++) {
-        // Comparer le département de l'étudiant avec celui entré par l'utilisateur
-        if (strcmp(etudiants[i].departement, departement) == 0) {
-            // Afficher les détails de l'étudiant
-            printf("Numero unique: %d\n", etudiants[i].numero);
-            printf("Nom: %s\n", etudiants[i].nom);
-            printf("Prenom: %s\n", etudiants[i].prenom);
-            printf("Date de naissance: %s\n", etudiants[i].date_naissance);
-            printf("Note generale: %.2f\n\n", etudiants[i].note_generale);
-            trouve = 1;
-        }
-    }
-
-    if (!trouve) {
-        printf("Aucun etudiant trouve dans ce departement.\n");
-    }
-}
-
-// Fonction pour calculer et afficher la moyenne générale de chaque département
-void calculerMoyenneParDepartement() {
-    if (nombre_etudiants == 0) {
-        printf("Aucun etudiant inscrit!\n");
-        return;
-    }
-    // Variables pour stocker la somme des notes et le nombre d'étudiants par département
-    float somme_notes[10] = {0};
-    int nombre_etudiants_par_departement[10] = {0};
-
-    // Variable pour la somme des moyennes des départements
-    float somme_moyennes_departements = 0;
-    int departements_comptes = 0; // Nombre de départements utilisés dans la moyenne
-
-    // Parcourir tous les étudiants et regrouper les notes par département
-    for (int i = 0; i < nombre_etudiants; i++) {
-        int index_departement = trouverDepartement(etudiants[i].departement);
-        somme_notes[index_departement] += etudiants[i].note_generale;
-        nombre_etudiants_par_departement[index_departement]++;
-    }
-
-    // Afficher la moyenne de chaque département et calculer la somme des moyennes
-    printf("\nMoyenne generale par departement:\n");
-    for (int i = 0; i < nombre_departements; i++) {
-        if (nombre_etudiants_par_departement[i] > 0) {
-            float moyenne_departement = somme_notes[i] / nombre_etudiants_par_departement[i];
-            printf("Departement %s: Moyenne = %.2f\n", departements[i], moyenne_departement);
-
-            // Ajouter la moyenne de ce département à la somme des moyennes
-            somme_moyennes_departements += moyenne_departement;
-            departements_comptes++; // Incrémentation implicite du nombre de départements non vides
-        }
-    }
-
-    // Calculer et afficher la moyenne générale de l'université si au moins un département a été compté
-    if (departements_comptes > 0) {
-        float moyenne_universite = somme_moyennes_departements / departements_comptes;
-        printf("\nMoyenne generale de l'universite (moyenne des departements): %.2f\n", moyenne_universite);
-    } else {
-        printf("\nAucun etudiant dans les departements.\n");
-    }
-}
-
-// Fonction pour affichage nombre etudiants par departement
-void afficherNombreEtudiantsParDepartement() {
-    if (nombre_etudiants == 0) {
-        printf("Aucun etudiant inscrit!\n");
-        return;
-    }
-
-    // Tableau pour stocker le nombre d'étudiants par département
-    int nombre_etudiants_par_departement[10] = {0};
-
-    // Parcourir tous les étudiants et compter ceux de chaque département
-    for (int i = 0; i < nombre_etudiants; i++) {
-        int index_departement = trouverDepartement(etudiants[i].departement);
-        if (index_departement != -1) {
-            nombre_etudiants_par_departement[index_departement]++;
-        }
-    }
-
-    // Afficher le nombre d'étudiants par département
-    printf("\nNombre d'etudiants par departement:\n");
-    for (int i = 0; i < nombre_departements; i++) {
-        printf("Departement %s: %d etudiant(s)\n", departements[i], nombre_etudiants_par_departement[i]);
-    }
-}
-
-
 
 // Fonction pour ajouter un étudiant
 void ajouterEtudiant() {
@@ -182,6 +83,7 @@ void ajouterEtudiant() {
     printf("Etudiant ajoute avec succes!\n");
 }
 
+
 // Fonction pour modifier un étudiant
 void modifierEtudiant() {
     int numero;
@@ -228,7 +130,9 @@ void supprimerEtudiant() {
     printf("Etudiant non trouve!\n");
 }
 
-// Fonction pour afficher les détails d'un étudiant
+
+
+// Fonction pour afficher les détails d'un étudiant par le numero
 void afficherEtudiant() {
     int numero;
     printf("Entrez le numero de l'etudiant: ");
@@ -248,7 +152,8 @@ void afficherEtudiant() {
     printf("Etudiant non trouve!\n");
 }
 
-// Fonction pour afficher les etudiants
+
+// Fonction pour afficher touts les etudiants
 void afficherEtudiants() {
     if(nombre_etudiants == 0) printf("Liste vide! \n");
     for (int i = 0; i < nombre_etudiants; i++) {
@@ -261,6 +166,83 @@ void afficherEtudiants() {
             printf("Note generale: %.2f\n", etudiants[i].note_generale);
     }
 
+}
+
+
+// Fonction pour calculer et afficher la moyenne générale de chaque département
+void calculerMoyenneParDepartement() {
+    if (nombre_etudiants == 0) {
+        printf("Aucun etudiant inscrit!\n");
+        return;
+    }
+    // Variables pour stocker la somme des notes et le nombre d'étudiants par département
+    float somme_notes[10] = {0};
+    int nombre_etudiants_par_departement[10] = {0};
+
+    // Variable pour la somme des moyennes des départements
+    float somme_moyennes_departements = 0;
+    int departements_comptes = 0; // Nombre de départements utilisés dans la moyenne
+
+    // Parcourir tous les étudiants et regrouper les notes par département
+    for (int i = 0; i < nombre_etudiants; i++) {
+        int index_departement = trouverDepartement(etudiants[i].departement);
+        somme_notes[index_departement] += etudiants[i].note_generale;
+        nombre_etudiants_par_departement[index_departement]++;
+    }
+
+    // Afficher la moyenne de chaque département et calculer la somme des moyennes
+    printf("\nMoyenne generale par departement:\n");
+    for (int i = 0; i < nombre_departements; i++) {
+        if (nombre_etudiants_par_departement[i] > 0) {
+            float moyenne_departement = somme_notes[i] / nombre_etudiants_par_departement[i];
+            printf("Departement %s: Moyenne = %.2f\n", departements[i], moyenne_departement);
+
+            // Ajouter la moyenne de ce département à la somme des moyennes
+            somme_moyennes_departements += moyenne_departement;
+            departements_comptes++; // Incrémentation implicite du nombre de départements non vides
+        }
+    }
+
+    // Calculer et afficher la moyenne générale de l'université si au moins un département a été compté
+    if (departements_comptes > 0) {
+        float moyenne_universite = somme_moyennes_departements / departements_comptes;
+        printf("\nMoyenne generale de l'universite (moyenne des departements): %.2f\n", moyenne_universite);
+    } else {
+        printf("\nAucun etudiant dans les departements.\n");
+    }
+}
+
+
+// Fonction pour afficher le total inscrit dans l universite
+void totalInscrit(){
+    printf("le nombre total des etudiants inscrits dans l universite est : %d",nombre_etudiants);
+    return;
+}
+
+
+// Fonction pour affichage nombre etudiants par departement
+void afficherNombreEtudiantsParDepartement() {
+    if (nombre_etudiants == 0) {
+        printf("Aucun etudiant inscrit!\n");
+        return;
+    }
+
+    // Tableau pour stocker le nombre d'étudiants par département
+    int nombre_etudiants_par_departement[10] = {0};
+
+    // Parcourir tous les étudiants et compter ceux de chaque département
+    for (int i = 0; i < nombre_etudiants; i++) {
+        int index_departement = trouverDepartement(etudiants[i].departement);
+        if (index_departement != -1) {
+            nombre_etudiants_par_departement[index_departement]++;
+        }
+    }
+
+    // Afficher le nombre d'étudiants par département
+    printf("\nNombre d'etudiants par departement:\n");
+    for (int i = 0; i < nombre_departements; i++) {
+        printf("Departement %s: %d etudiant(s)\n", departements[i], nombre_etudiants_par_departement[i]);
+    }
 }
 
 
@@ -282,107 +264,6 @@ void superieureSeuil() {
     printf("Nombre d'etudiants ayant note > %.2f est: %d\n",seuil, nb_etudiants_reussi);
 }
 
-// Fonction pour trier les étudiants par nom (ordre alphabétique)
-void trierEtudiantsParNom() {
-    Etudiant temp;
-    for (int i = 0; i < nombre_etudiants - 1; i++) {
-        for (int j = i + 1; j < nombre_etudiants; j++) {
-            if (strcmp(etudiants[i].nom, etudiants[j].nom) > 0) {
-                temp = etudiants[i];
-                etudiants[i] = etudiants[j];
-                etudiants[j] = temp;
-            }
-        }
-    }
-    printf("Etudiants tries par nom.\n");
-    for (int i = 0; i < nombre_etudiants; i++) {
-        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
-               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
-    }
-}
-
-// Fonction pour trier les étudiants par nom (ordre alphabétique) INVERSE
-void trierEtudiantsParNomInverse() {
-    Etudiant temp;
-    for (int i = 0; i < nombre_etudiants - 1; i++) {
-        for (int j = i + 1; j < nombre_etudiants; j++) {
-            // Inverser la condition pour un tri inverse
-            if (strcmp(etudiants[i].nom, etudiants[j].nom) < 0) {
-                temp = etudiants[i];
-                etudiants[i] = etudiants[j];
-                etudiants[j] = temp;
-            }
-        }
-    }
-    printf("Etudiants tries par nom (ordre inverse).\n");
-    for (int i = 0; i < nombre_etudiants; i++) {
-        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
-               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
-    }
-}
-
-
-// Fonction pour rechercher un étudiant par nom
-void rechercherEtudiant() {
-    char nom[50];
-    printf("Entrez le nom de l'etudiant a rechercher: ");
-    scanf("%s", nom);
-
-    for (int i = 0; i < nombre_etudiants; i++) {
-        if (strcmp(etudiants[i].nom, nom) == 0) {
-            printf("Etudiant trouve: Nom: %s, Prenom: %s, Departement: %s, Note: %.2f\n", etudiants[i].nom, etudiants[i].prenom, etudiants[i].departement, etudiants[i].note_generale);
-            return;
-        }
-    }
-    printf("Etudiant non trouve!\n");
-}
-
-
-// Fonction pour afficher le total inscrit dans l universite
-void totalInscrit(){
-    printf("le nombre total des etudiants inscrits dans l universite est : %d",nombre_etudiants);
-    return;
-}
-
-
-// Fonction pour trier les étudiants par note générale (ordre décroissant)
-void trierEtudiantsParNote() {
-    for (int i = 0; i < nombre_etudiants - 1; i++) {
-        for (int j = 0; j < nombre_etudiants - i - 1; j++) {
-            if (etudiants[j].note_generale < etudiants[j + 1].note_generale) {
-                // Échange des étudiants
-                Etudiant temp = etudiants[j];
-                etudiants[j] = etudiants[j + 1];
-                etudiants[j + 1] = temp;
-            }
-        }
-    }
-     printf("\n Liste des etudiants tries par note generale (du plus eleve au plus faible):\n");
-    for (int i = 0; i < nombre_etudiants; i++) {
-        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
-               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
-    }
-}
-
-
-// Fonction pour trier les étudiants par note générale (ordre croissant)
-void trierEtudiantsParNoteInverse() {
-    for (int i = 0; i < nombre_etudiants - 1; i++) {
-        for (int j = 0; j < nombre_etudiants - i - 1; j++) {
-            if (etudiants[j].note_generale < etudiants[j + 1].note_generale) {
-                // Échange des étudiants
-                Etudiant temp = etudiants[j];
-                etudiants[j] = etudiants[j + 1];
-                etudiants[j + 1] = temp;
-            }
-        }
-    }
-     printf("\n Liste des etudiants tries par note generale (du plus faible au plus eleve):\n");
-    for (int i = 0; i < nombre_etudiants; i++) {
-        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
-               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
-    }
-}
 
 // Fonction pour afficher les 3 étudiants ayant les meilleures notes
 void afficherTop3Etudiants() {
@@ -411,6 +292,7 @@ void afficherTop3Etudiants() {
     }
 }
 
+
 // Fonction pour afficher le nombre d'étudiants ayant réussi dans chaque département
 void afficherNombreReussitesParDepartement() {
     // Tableau pour compter les réussites par département
@@ -430,6 +312,135 @@ void afficherNombreReussitesParDepartement() {
     printf("\nNombre d'etudiants ayant reussi dans chaque departement:\n");
     for (int i = 0; i < nombre_departements; i++) {
         printf("Departement %s: %d reussite(s)\n", departements[i], reussites_par_departement[i]);
+    }
+}
+
+
+// Fonction pour rechercher un étudiant par nom
+void rechercherEtudiant() {
+    char nom[50];
+    printf("Entrez le nom de l'etudiant a rechercher: ");
+    scanf("%s", nom);
+
+    for (int i = 0; i < nombre_etudiants; i++) {
+        if (strcmp(etudiants[i].nom, nom) == 0) {
+            printf("Etudiant trouve: Nom: %s, Prenom: %s, Departement: %s, Note: %.2f\n", etudiants[i].nom, etudiants[i].prenom, etudiants[i].departement, etudiants[i].note_generale);
+            return;
+        }
+    }
+    printf("Etudiant non trouve!\n");
+}
+
+
+// Fonction pour afficher les étudiants d'un département spécifique
+void afficherEtudiantsParDepartement() {
+    int trouve = 0;
+    char departement[50];
+
+    printf("Donner le nom du departement: \n");
+    scanf("%s",&departement);
+
+
+    printf("\nListe des etudiants dans le departement %s:\n", departement);
+
+    // Parcourir tous les étudiants
+    for (int i = 0; i < nombre_etudiants; i++) {
+        // Comparer le département de l'étudiant avec celui entré par l'utilisateur
+        if (strcmp(etudiants[i].departement, departement) == 0) {
+            // Afficher les détails de l'étudiant
+            printf("Numero unique: %d\n", etudiants[i].numero);
+            printf("Nom: %s\n", etudiants[i].nom);
+            printf("Prenom: %s\n", etudiants[i].prenom);
+            printf("Date de naissance: %s\n", etudiants[i].date_naissance);
+            printf("Note generale: %.2f\n\n", etudiants[i].note_generale);
+            trouve = 1;
+        }
+    }
+
+    if (!trouve) {
+        printf("Aucun etudiant trouve dans ce departement.\n");
+    }
+}
+
+
+// Fonction pour trier les étudiants par nom (ordre alphabétique)
+void trierEtudiantsParNom() {
+    Etudiant temp;
+    for (int i = 0; i < nombre_etudiants - 1; i++) {
+        for (int j = i + 1; j < nombre_etudiants; j++) {
+            if (strcmp(etudiants[i].nom, etudiants[j].nom) > 0) {
+                temp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = temp;
+            }
+        }
+    }
+    printf("Etudiants tries par nom.\n");
+    for (int i = 0; i < nombre_etudiants; i++) {
+        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
+               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
+    }
+}
+
+
+// Fonction pour trier les étudiants par nom (ordre alphabétique) INVERSE
+void trierEtudiantsParNomInverse() {
+    Etudiant temp;
+    for (int i = 0; i < nombre_etudiants - 1; i++) {
+        for (int j = i + 1; j < nombre_etudiants; j++) {
+            // Inverser la condition pour un tri inverse
+            if (strcmp(etudiants[i].nom, etudiants[j].nom) < 0) {
+                temp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = temp;
+            }
+        }
+    }
+    printf("Etudiants tries par nom (ordre inverse).\n");
+    for (int i = 0; i < nombre_etudiants; i++) {
+        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
+               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
+    }
+}
+
+
+// Fonction pour trier les étudiants par note générale (ordre décroissant)
+void trierEtudiantsParNote() {
+    for (int i = 0; i < nombre_etudiants - 1; i++) {
+        for (int j = 0; j < nombre_etudiants - i - 1; j++) {
+            if (etudiants[j].note_generale < etudiants[j + 1].note_generale) {
+                // Échange des étudiants
+                Etudiant temp = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = temp;
+            }
+        }
+    }
+     printf("\n Liste des etudiants tries par note generale (du plus eleve au plus faible):\n");
+    for (int i = 0; i < nombre_etudiants; i++) {
+        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
+               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
+    }
+}
+
+
+
+// Fonction pour trier les étudiants par note générale (ordre croissant)
+void trierEtudiantsParNoteInverse() {
+    for (int i = 0; i < nombre_etudiants - 1; i++) {
+        for (int j = 0; j < nombre_etudiants - i - 1; j++) {
+            if (etudiants[j].note_generale < etudiants[j + 1].note_generale) {
+                // Échange des étudiants
+                Etudiant temp = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = temp;
+            }
+        }
+    }
+     printf("\n Liste des etudiants tries par note generale (du plus faible au plus eleve):\n");
+    for (int i = 0; i < nombre_etudiants; i++) {
+        printf("%d. %s %s, Note: %.2f, Departement: %s\n",
+               i + 1, etudiants[i].prenom, etudiants[i].nom, etudiants[i].note_generale, etudiants[i].departement);
     }
 }
 
@@ -468,8 +479,6 @@ void trierEtudiantsReussis() {
 
 
 
-
-
 int main() {
     int choix=-1;
     int a,b,c,d;
@@ -484,7 +493,7 @@ int main() {
         printf("6. Rechercher un etudiant \n");
         printf("7. Trier les etudiants  \n");
 
-        printf("0. Quitter\n");
+        printf("0. Quitter\n\n");
         printf("Choisissez une option: ");
         scanf("%d", &choix);
 
